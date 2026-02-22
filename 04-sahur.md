@@ -4,15 +4,15 @@
 
 **Sahur** is the pre-dawn meal eaten before fasting during Ramadan. 🌙🍱
 
-When the player walks into the Start Gate, the game transitions to an outdoor Sahur scene.
+When the player walks into the Start Gate, the game switches to an outdoor Sahur scene.
 
-In this tutorial you will swap the background, clean up intro sprites, and place decorative trees.
+In this tutorial you will swap the background, clean up intro sprites, and place 4 decorative trees.
 
-## Step 1: Swap background and clean up intro
+## Step 1: Swap background and clean up
 
 Go to your **on Player overlaps StartGate** block from Tutorial 2. Delete the splash placeholder.
 
-Set the Sahur background image and destroy the intro sprites, then reset the score:
+Set the Sahur background image, destroy the intro sprites, and reset the score:
 
 ```blocks
 sprites.onOverlap(SpriteKind.Player, SpriteKind.StartGate, function (sprite, otherSprite) {
@@ -25,32 +25,26 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.StartGate, function (sprite, oth
     RamdhanKareem.destroy()
     StartText.destroy()
     info.setScore(0)
-    sprites.destroy(NextButton)
 })
 ```
 
 ~hint Background image tip 💡
-Click the image box → switch to **My Assets** → select your **Sahur Background** image!
+Click the image box → **My Assets** tab → select your **Sahur Background** image!
 hint~
 
-## Step 2: Place trees on the left side
+## Step 2: Place 2 trees on the left
 
-Add 2 green trees on the left side of the scene to frame the outdoor setting.
-
-Still inside the overlap block, create both tree sprites and position them:
+Still inside the overlap block, add 2 green trees on the left side of the scene:
 
 ```blocks
     let tree1 = sprites.create(img`
         . . . 7 9 . . . 7 9 . . . . . .
         . . 9 9 9 9 9 . 7 9 9 . . . . .
         . 9 3 3 7 7 . 9 6 9 7 . . . . .
-        . . . . . . . . . . . . . . . .
         . . . . 4 e e e e . . . . . . .
         . . . . 4 e e e c . . . . . . .
         . . . e 4 e e c e . . . . . . .
         . . . e e e e c e . . . . . . .
-        . . . . 4 e e e c . . . . . . .
-        . . . . . e e e . . . . . . . .
         `, SpriteKind.Trees)
     tree1.setPosition(30, 79)
     let tree2 = sprites.create(img`
@@ -59,14 +53,13 @@ Still inside the overlap block, create both tree sprites and position them:
         . . . . 4 e e e e . . . . . . .
         . . . . 4 e e e c . . . . . . .
         . . . e 4 e e c e . . . . . . .
-        . . . . . e e e . . . . . . . .
         `, SpriteKind.Trees)
     tree2.setPosition(11, 100)
 ```
 
-## Step 3: Place trees on the right side
+## Step 3: Place 2 trees on the right
 
-Add 2 teal-toned trees on the right for visual variety and depth:
+Add 2 teal-toned trees on the right for depth and visual variety:
 
 ```blocks
     let tree3 = sprites.create(img`
@@ -75,7 +68,6 @@ Add 2 teal-toned trees on the right for visual variety and depth:
         . . . . 4 e e e e . . . . . . .
         . . . . 4 e e e c . . . . . . .
         . . . e 4 e e c e . . . . . . .
-        . . . . . e e e . . . . . . . .
         `, SpriteKind.Trees)
     tree3.setPosition(115, 69)
     let tree4 = sprites.create(img`
@@ -83,15 +75,14 @@ Add 2 teal-toned trees on the right for visual variety and depth:
         . . 5 5 5 5 5 . 7 5 5 . . . . .
         . . . . 4 e e e e . . . . . . .
         . . . . 4 e e e c . . . . . . .
-        . . . . . e e e . . . . . . . .
         `, SpriteKind.Trees)
     tree4.setPosition(134, 85)
 ```
 
-Press **Play** ▶️ → walk into the gate → you should see the outdoor scene with all 4 trees! 🌳
+Press **Play** ▶️ → walk into the gate → outdoor scene with 4 trees should appear! 🌳
 
 ## Done! @showdialog
 
-The Sahur outdoor scene is set! 🌳🌙
+The Sahur outdoor scene is ready! 🌳🌙
 
 Next up — **spawning Sahur food** for the player to collect!

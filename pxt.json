@@ -9,11 +9,9 @@
         "01-spritekinds.md",
         "02-intro.md",
         "03-player.md",
-        "04-directional.md",
-        "05-sahur.md",
-        "06-food.md",
-        "07-coins.md",
-        "08-finish.md"
+        "04-sahur.md",
+        "05-food.md",
+        "06-finish.md"
     ],
     "preferredEditor": "tsprj"
 }

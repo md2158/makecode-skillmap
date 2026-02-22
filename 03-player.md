@@ -4,13 +4,13 @@
 
 Time to add the **player** — a boy sprite who walks around collecting food and coins! 🚶
 
-In this tutorial you will create the sprite, enable movement, and add a walking animation.
+In this tutorial you will create the sprite, enable movement, scale it up, and add a walking animation.
 
-## Step 1: Create and move the player
+## Step 1: Create, move and position the player
 
-Inside ``||loops:on start||``, create the player sprite using your **Boy-standing** asset and set Kind to **Player**.
+Inside ``||loops:on start||``, create the player sprite using your **Boy-standing** asset with Kind **Player**.
 
-Then hook it up to the controller, set the starting position on the left, and lock it to the screen:
+Hook it up to the controller, set the starting position on the left, and lock it to screen edges:
 
 ```blocks
 let mySprite = sprites.create(img`
@@ -38,23 +38,21 @@ mySprite.setStayInScreen(true)
 
 ## Step 2: Scale up the player
 
-The sprite is small by default. Scale it up to **2×** so it stands out clearly on screen:
+Add a **set scale** block from ``||sprites:Sprites||`` and set it to **2** — this makes the player twice as large and easy to see:
 
 ```blocks
 mySprite.setScale(2, ScaleAnchor.Middle)
 ```
 
-Find **set mySprite scale** in ``||sprites:Sprites||``. Set the number to **2** and anchor to **Middle**.
+Press **Play** ▶️ — your character should now be bigger and walk around the screen!
 
-~hint What does ScaleAnchor.Middle do? 💡
-It scales the sprite from its **center point** outward — so it grows evenly in all directions and stays in the same screen position!
+~hint ScaleAnchor.Middle explained 💡
+The sprite scales from its **center point** outward — so it grows evenly in all directions and stays in the same position!
 hint~
 
 ## Step 3: Add the walking animation
 
-Go to ``||animation:Animation||`` and drag out the **animate sprite** block.
-
-Click the **+** to add 3 walking frames from your My Assets. Set interval to **500ms** and loop to **true**:
+Go to ``||animation:Animation||`` and drag out the **animate sprite** block. Click **+** to add 3 walking frames from My Assets. Set interval to **500ms** and loop to **true**:
 
 ```blocks
 animation.runImageAnimation(
@@ -83,10 +81,14 @@ animation.runImageAnimation(
 )
 ```
 
-Press **Play** ▶️ — your character should walk with animation and stop at screen edges!
+~hint Animation speed tip 💡
+Try **200ms** for a faster walk or **800ms** for a slow shuffle. The last parameter **true** means the frames loop forever!
+hint~
 
 ## Done! @showdialog
 
-Your player is alive and walking! 🎉🚶
+Your player is walking and animated! 🎉🚶
 
-Next up — making the character **face left** when moving left!
+**Path 1 — Setting Up the Game World is COMPLETE!** 🎉
+
+Head to **Path 2** to build the Sahur food-collecting scene! 🌙🍱

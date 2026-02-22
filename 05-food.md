@@ -2,15 +2,15 @@
 
 ## Time to eat! @showdialog
 
-The player needs to collect **15 Sahur food items** before Sahur time ends! 🍱
+The player must collect **15 Sahur food items** before time runs out! 🍱
 
-In this tutorial you will spawn food sprites, handle collection with overlap events, and play a sound effect.
+In this tutorial you will spawn food sprites with a timed loop, handle collection with overlap events, add sound effects, and unlock the Next button at score 15.
 
-## Step 1: Spawn 15 food sprites with a loop
+## Step 1: Spawn 15 foods with a timed loop
 
 Still inside the **on Player overlaps StartGate** block (after the trees), add a **repeat 15** loop from ``||loops:Loops||``.
 
-Inside the loop, create a food sprite at a **random position** and pause half a second between each spawn:
+Inside the loop, create a food sprite at a random position and pause 500ms between each spawn:
 
 ```blocks
     for (let index = 0; index < 15; index++) {
@@ -19,12 +19,10 @@ Inside the loop, create a food sprite at a **random position** and pause half a 
             . 2 b 4 4 4 4 4 4 b . . . . . . 
             2 2 4 4 4 4 d d 4 4 b . . . . . 
             2 b 4 4 4 4 4 4 d 4 b . . . . . 
-            2 b 4 4 4 4 4 4 4 d 4 b . . . . 
             2 b 4 4 4 4 4 4 4 4 4 b . . . . 
             2 2 b 4 4 4 4 4 4 4 b e . . . . 
             . 2 b b b 4 4 4 b b b e . . . . 
             . . e b b b b b b b e e . . . . 
-            . . . e e b 4 4 b e e e . . . . 
             `, SpriteKind.Food)
         SahurFood.setPosition(randint(0, 100), randint(0, 100))
         SahurFood.setStayInScreen(true)
@@ -33,14 +31,14 @@ Inside the loop, create a food sprite at a **random position** and pause half a 
 ```
 
 ~hint Why pause(500)? 💡
-Without the pause all 15 foods appear at once. With **500ms** delay, they drip in one by one — giving the player time to see and chase each one!
+Without the pause all 15 foods appear at once. With a **500ms** delay they drip in one by one — giving the player time to see and chase each one!
 hint~
 
-## Step 2: Handle food collection and sound
+## Step 2: Handle food collection and play a sound
 
 Add a new **on Player overlaps Food** block from ``||sprites:Sprites||``.
 
-Inside it, increase the score, destroy the food, and play a beep sound for the first 5 collects:
+Increase score, destroy the food, and play a beep sound for the first 5 collects:
 
 ```blocks
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
@@ -66,7 +64,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
 
 ## Step 3: Unlock the Next button at score 15
 
-Inside the same overlap block, add an **if score = 15** check. When it triggers, create the animated Next button sprite:
+Inside the same food overlap block, add an **if score = 15** check. When it fires, spawn the animated Next button:
 
 ```blocks
     if (info.score() == 15) {
@@ -84,11 +82,11 @@ Inside the same overlap block, add an **if score = 15** check. When it triggers,
 ```
 
 ~hint Score == 15 not >= 15 💡
-Using **exactly 15** means the button only spawns once — the moment the 15th food is collected. Using >= 15 would try to create it on every collect after that!
+Using **exactly 15** means the button spawns only once — the moment the 15th food is collected!
 hint~
 
 ## Done! @showdialog
 
 Food collection is working! 🍱✅
 
-Next up — **Pahala coins** and completing the full game loop!
+Last tutorial — **Pahala coins** and completing the full game loop!
