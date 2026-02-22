@@ -2,107 +2,111 @@
 
 ## The Sahur Phase Begins! @showdialog
 
-**Sahur** is the pre-dawn meal Muslims eat before fasting begins during Ramadan. In this tutorial, you'll build the Sahur scene — swapping the intro background for an outdoor setting and placing decorative trees around the screen.
+**Sahur** is the pre-dawn meal eaten before fasting starts during Ramadan. 🌙
 
-## Step 1: Create the Sahur function
+In this tutorial you will build the Sahur scene by:
+- Swapping in a new background image
+- Removing the intro sprites
+- Placing decorative trees around the screen
 
-Create a new function called `Sahur()`. This will be called when the player touches the Start Gate.
+## Step 1: Swap the background
 
-```typescript
-function Sahur() {
-    // We'll build this step by step
-}
+When the player touches the Start Gate, the scene changes. Inside your **on sprite overlaps** block, add a **set background image** block:
+
+```blocks
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Player, function (sprite, otherSprite) {
+    scene.setBackgroundImage(img`
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        e e e e e e e e e e e e e e e e
+        e e e e e e e e e e e e e e e e
+    `)
+})
 ```
 
-## Step 2: Set the Sahur background
+~hint How do I use my real background? 💡
+Click the grey image box and switch to the **My Assets** tab. Choose your **Sahur Background** asset!
+hint~
 
-Replace the solid background color with a detailed background image of an outdoor Sahur setting:
+## Step 2: Destroy the intro sprites
 
-```typescript
-function Sahur() {
-    scene.setBackgroundImage(assets.image`Sahur Background`)
-}
+The greeting banner and start gate are no longer needed. Add **destroy sprite** blocks for both:
+
+```blocks
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Player, function (sprite, otherSprite) {
+    scene.setBackgroundImage(img`
+        7 7 7 7 7 7 7 7
+        e e e e e e e e
+    `)
+    RamdhanKareem.destroy()
+    StartText.destroy()
+})
 ```
 
-## Step 3: Destroy the intro sprites
+## Step 3: Reset the score
 
-The "Ramadan Kareem" banner and Start Gate banner from the intro screen are no longer needed. Destroy them to clean up the scene:
+At the start of Sahur, reset the score back to zero:
 
-```typescript
-    sprites.destroy(RamdhanKareem)
-    sprites.destroy(StartText)
-```
-
-## Step 4: Reset the score
-
-When entering the Sahur phase, reset the score back to 0 so the player starts fresh:
-
-```typescript
+```blocks
     info.setScore(0)
 ```
 
-Also destroy the `NextButton` in case it was left over from a previous run:
+Find this in ``||info:Info||`` → **set score to 0**.
 
-```typescript
-    sprites.destroy(NextButton)
+## Step 4: Place Tree 1 and Tree 2
+
+Create two tree sprites using your tree pixel art and position them on the left side of the screen:
+
+```blocks
+let tree1 = sprites.create(img`
+    . . . 7 9 . . . 7 9 . . . . . .
+    . . 9 9 9 9 9 . 7 9 9 . . . . .
+    . 9 3 3 7 7 . 9 6 9 7 4 7 6 . .
+    . . . . . . . . . . . . . . . .
+    . . . . 4 e e e e . . . . . . .
+    . . . . 4 e e e c . . . . . . .
+    . . . . 4 e e e c . . . . . . .
+    . . . e 4 e e c e . . . . . . .
+    `, SpriteKind.Player)
+tree1.setPosition(30, 79)
+
+let tree2 = sprites.create(img`
+    . . . 7 9 . . . 7 9 . . . . . .
+    . . 9 9 9 9 9 . 7 9 9 . . . . .
+    . . . . 4 e e e e . . . . . . .
+    . . . . 4 e e e c . . . . . . .
+    `, SpriteKind.Player)
+tree2.setPosition(11, 100)
 ```
 
-## Step 5: Declare tree variables
+## Step 5: Place Tree 3 and Tree 4
 
-At the bottom of your project, add variables for the four trees:
+Add two more trees on the right side using a slightly different teal-toned image:
 
-```typescript
-let tree1: Sprite = null
-let tree2: Sprite = null
-let tree3: Sprite = null
-let tree4: Sprite = null
+```blocks
+let tree3 = sprites.create(img`
+    . . . 7 5 . . . 7 5 . . . . . .
+    . . 5 5 5 5 5 . 7 5 5 . . . . .
+    . . . . 4 e e e e . . . . . . .
+    . . . . 4 e e e c . . . . . . .
+    `, SpriteKind.Player)
+tree3.setPosition(115, 69)
+
+let tree4 = sprites.create(img`
+    . . . 7 5 . . . 7 5 . . . . . .
+    . . 5 5 5 5 5 . 7 5 5 . . . . .
+    . . . . 4 e e e e . . . . . . .
+    . . . . 4 e e e c . . . . . . .
+    `, SpriteKind.Player)
+tree4.setPosition(134, 85)
 ```
 
-## Step 6: Place the trees
-
-Add four tree sprites around the screen. Two use a green-toned image, two use a slightly different teal-toned version, giving visual variety. Position them at different spots to frame the scene:
-
-```typescript
-    tree1 = sprites.create(img`...`, SpriteKind.Trees)
-    tree1.setPosition(30, 79)
-
-    tree2 = sprites.create(img`...`, SpriteKind.Trees)
-    tree2.setPosition(11, 100)
-
-    tree3 = sprites.create(img`...`, SpriteKind.Trees)
-    tree3.setPosition(115, 69)
-
-    tree4 = sprites.create(img`...`, SpriteKind.Trees)
-    tree4.setPosition(134, 85)
-```
-
-> **Tip:** Copy the full pixel art for each tree from the game's source code. `tree1` and `tree2` share the same image (green), while `tree3` and `tree4` use a teal variant.
-
-## Tip: Scene layering
-
-In MakeCode Arcade, sprites appear **in front of** the background image. Trees use `SpriteKind.Trees` — not `Player` — so they don't collide with anything. They're purely decorative!
-
-## Your Sahur() function so far
-
-```typescript
-function Sahur() {
-    scene.setBackgroundImage(assets.image`Sahur Background`)
-    sprites.destroy(RamdhanKareem)
-    sprites.destroy(StartText)
-    info.setScore(0)
-    sprites.destroy(NextButton)
-    // tree sprites go here...
-    tree1 = sprites.create(img`...`, SpriteKind.Trees)
-    tree1.setPosition(30, 79)
-    tree2 = sprites.create(img`...`, SpriteKind.Trees)
-    tree2.setPosition(11, 100)
-    tree3 = sprites.create(img`...`, SpriteKind.Trees)
-    tree3.setPosition(115, 69)
-    tree4 = sprites.create(img`...`, SpriteKind.Trees)
-    tree4.setPosition(134, 85)
-}
-```
+~hint Trees are decoration! 💡
+In the full game, trees use a custom **Trees** kind so they do not trigger overlap events. They are just pretty scenery!
+hint~
 
 ## Done! @showdialog
 
-The Sahur scene is looking great! 🌳 In the next tutorial, you'll spawn Sahur food items for the player to collect.
+The Sahur outdoor scene is looking great! 🌳🌙
+
+Next tutorial — spawning Sahur food for the player to collect!

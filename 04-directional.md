@@ -2,82 +2,89 @@
 
 ## Make Movement Feel Real! @showdialog
 
-Right now your character walks, but they always face the same direction. In this tutorial, you'll use **controller button events** to swap animations when the player moves left — and restore the default animation when they stop.
+Right now your character walks — but they always face the same direction!
 
-## Step 1: Understand controller events
+In this tutorial you will use **controller button events** to swap animations when the player moves left, and restore the default when they stop.
 
-MakeCode Arcade has two kinds of button events:
-- `ControllerButtonEvent.Pressed` — fires the moment the button is held down
-- `ControllerButtonEvent.Released` — fires the moment the button is let go
+## How button events work @showdialog
 
-We'll use `Pressed` to start the left-facing animation, and `Released` to go back to the default.
+There are two types of button events:
 
-## Step 2: Add the left-press animation
+- **Pressed** → fires the moment you press the button
+- **Released** → fires the moment you let go
 
-When the player presses the **left** button, switch to a set of left-facing walking frames:
+We use **Pressed** to start the left-facing walk, and **Released** to go back to normal.
 
-```typescript
+## Step 1: Add the left-press event
+
+Go to ``||controller:Controller||`` and find the **on left button pressed** block. Drag it to your workspace.
+
+Inside it, add an **animate** block with your left-facing frames:
+
+```blocks
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
         mySprite,
-        [img`... left-frame1 ...`, img`... left-frame2 ...`, img`... left-frame3 ...`],
+        [img`
+        . . . f f f f f . . . . 
+        . . f e e e e e f f . . 
+        . f e e e e e e e f f . 
+        f e e e e e e e f f f f 
+        f e e 4 e e e f f f f f 
+        f f e 4 4 4 4 4 f f f f 
+        f f e 4 4 f f 4 e 4 f f 
+        . f f d d d d 4 d 4 f . 
+        . . f b b d d 4 f f f . 
+        . . f 1 1 1 e d d 4 . . 
+        . . f 6 6 6 f e e f . . 
+        `],
         500,
         true
     )
 })
 ```
 
-> **Tip:** The left-facing frames are a mirrored version of the right-facing ones. Copy them from the game source — they use the same color palette but the body faces left.
+~hint Where are the left-facing frames? 💡
+The left-facing frames are a mirror of the right-facing ones. Open your sprite editor and flip the image horizontally, or draw new frames facing left!
+hint~
 
-## Step 3: Restore the animation on right release
+## Step 2: Restore the animation on right release
 
-When the player **releases** the right button (meaning they stop moving right), go back to the neutral walking animation:
+When the player **releases** the right button, swap back to the default walking animation.
 
-```typescript
+Find the **on right button released** block from ``||controller:Controller||``:
+
+```blocks
 controller.right.onEvent(ControllerButtonEvent.Released, function () {
     animation.runImageAnimation(
         mySprite,
-        [img`... default-frame1 ...`, img`... default-frame2 ...`, img`... default-frame3 ...`],
+        [img`
+        . . . . f f f f . . . . 
+        . . f f e e e e f f . . 
+        . f f e e e e e e f f . 
+        f f f f 4 e e e f f f f 
+        f 4 e 4 4 4 4 4 4 e 4 f 
+        f 4 4 f f 4 4 f f 4 4 f 
+        4 4 f 6 6 6 6 6 6 f 4 4 
+        `],
         500,
         true
     )
 })
 ```
 
-## Why Released and not Pressed for right?
+## Step 3: Test it!
 
-The default animation already plays when the game starts. We only need to *restore* it after the player has moved left. Using `Released` on the right button catches the moment the player stops moving right and snaps back to neutral.
+Press the **Play** button and try walking left and right. Does your character face the right direction?
 
-## Step 4: Think about edge cases
-
-What happens if the player presses left and right at the same time? MakeCode will just run whichever event fires last. For this game that's fine — it's a simple side-scroller and we don't need complex state management.
-
-## Full event handlers
-
-```typescript
-controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    animation.runImageAnimation(
-        mySprite,
-        [ /* 3 left-facing frames */ ],
-        500,
-        true
-    )
-})
-
-controller.right.onEvent(ControllerButtonEvent.Released, function () {
-    animation.runImageAnimation(
-        mySprite,
-        [ /* 3 default frames */ ],
-        500,
-        true
-    )
-})
-```
-
-## Challenge!
-
-Can you add a `controller.right.onEvent(ControllerButtonEvent.Pressed)` handler with a slightly faster animation interval (say `300ms`) to make the character look like they're rushing to the right?
+~hint Challenge! 🌟
+Can you also add an **on up button pressed** event that makes the character jump or wave? Try adding a different animation frame set!
+hint~
 
 ## Done! @showdialog
 
-Your character now faces the right direction when moving! 🎮 You've completed **Path 1**. Head over to **Path 2** to start building the Sahur food-collecting scene!
+Your character now faces the right way when moving! 🎮
+
+You have finished **Path 1 — Setting Up the Game World**!
+
+Head over to **Path 2** to start building the Sahur food-collecting scene! 🌙

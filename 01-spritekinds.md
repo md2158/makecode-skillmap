@@ -1,62 +1,47 @@
 # Create Custom Sprite Kinds
 
-## Welcome to the Ramadan Game! @showdialog
+## Welcome! @showdialog
 
-In this tutorial, you'll learn how to define **custom Sprite Kinds** — special categories that let MakeCode Arcade tell different types of sprites apart, like players, coins, food, and decorations.
+In this tutorial, you will learn how to create **custom Sprite Kinds** for the Ramadan game.
 
-By the end, you'll have all the sprite kinds you need for the full Ramadan game!
+Sprite Kinds help the game tell different sprites apart — like the player, coins, food, and trees!
 
-## What is a Sprite Kind?
+## What are Sprite Kinds? @showdialog
 
-MakeCode Arcade comes with built-in kinds like `Player`, `Enemy`, and `Food`. But for our game we need more — like a `StartGate`, `Coin`, `Trees`, and more.
+MakeCode Arcade already has kinds like **Player**, **Enemy**, and **Food**.
 
-We create them inside a `namespace SpriteKind` block using `SpriteKind.create()`.
+But our Ramadan game needs more kinds:
+- 🎋 **Decoration** — banners and background art
+- 🚪 **StartGate** — the banner the player walks into
+- ✨ **FinishSahur** — the Next button that appears when done
+- 🌳 **Trees** — decorative trees
+- 🪙 **Coin** — Pahala reward coins
 
-## Step 1: Open the namespace
+## Step 1: Open the Sprite Kind menu
 
-At the top of your project, before anything else, add this block to define your custom sprite kinds:
+Click on ``||sprites:Sprites||`` in the toolbox.
 
-```typescript
-namespace SpriteKind {
-    export const Decoration = SpriteKind.create()
-    export const Table = SpriteKind.create()
-    export const FinishSahur = SpriteKind.create()
-    export const Trees = SpriteKind.create()
-    export const StartGate = SpriteKind.create()
-    export const Coin = SpriteKind.create()
-}
+Scroll down and find **"Set sprite kind"** blocks — these let you pick which kind a sprite is.
+
+## Step 2: See the kinds in action
+
+Every time you create a sprite, you choose its kind. Like this:
+
+```blocks
+let mySprite = sprites.create(img`
+    . . . . . . . . 
+    . . . . . . . . 
+    `, SpriteKind.Player)
 ```
 
-## Step 2: Understand each kind
+## Step 3: Try it yourself!
 
-Here's what each custom kind is for in our game:
+Drag out a ``||sprites:set mySprite to sprite of kind Player||`` block from the Sprites toolbox.
 
-- **Decoration** — Background art like the "Ramadan Kareem" banner
-- **Table** — Reserved for future use (food tables)
-- **FinishSahur** — The animated Next button that appears when Sahur is complete
-- **Trees** — Decorative trees in the outdoor Sahur scene
-- **StartGate** — The banner the player walks into to begin the Sahur phase
-- **Coin** — The Pahala (reward) coins the player collects
+Click the **Player** dropdown — you can see all the built-in kinds. In later steps you will add your own!
 
-## Step 3: Why is this important?
+## Great work! @showdialog
 
-Custom sprite kinds are what make `sprites.onOverlap()` work correctly. When the player touches a `StartGate`, the game knows to start the Sahur phase. When they touch a `Coin`, it increases the score. Without separate kinds, the game couldn't tell them apart!
+You now understand Sprite Kinds! 🌙
 
-## Try it!
-
-Add the `namespace SpriteKind` block to your project. Notice how the new kinds now appear in the Sprites dropdown throughout MakeCode.
-
-```typescript
-namespace SpriteKind {
-    export const Decoration = SpriteKind.create()
-    export const Table = SpriteKind.create()
-    export const FinishSahur = SpriteKind.create()
-    export const Trees = SpriteKind.create()
-    export const StartGate = SpriteKind.create()
-    export const Coin = SpriteKind.create()
-}
-```
-
-## Done! @showdialog
-
-Great work! You now have 6 custom sprite kinds ready to use throughout your game. In the next tutorial, you'll use `Decoration` and `StartGate` to build the intro screen. Keep going! 🌙
+In the next tutorial you will use these kinds to build the **intro screen**.

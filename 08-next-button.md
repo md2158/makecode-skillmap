@@ -1,142 +1,121 @@
-# Unlock the Next Button & Complete the Game Loop
+# Unlock the Next Button and Game Flow
 
 ## Bring It All Together! @showdialog
 
-This is the final tutorial! You'll wire up the animated **Next button** that appears when the player reaches the score target, and connect all the game phases into one complete flow. By the end, you'll have a fully working Ramadan game! 🌙
+This is the final tutorial! 🎉
 
-## Recap: The full game flow
+You will wire up the animated **Next button** and connect all the game phases into one complete Ramadan game loop!
+
+## The full game flow @showdialog
+
+Here is how the game works from start to finish:
 
 ```
-intro()
-    ↓ player walks into Start Gate
-Sahur()
-    ↓ player collects 15 foods OR 10 coins
-Next button appears (FinishSahur sprite)
-    ↓ player walks into Next button
-Puasa()
+🌙 Intro screen
+   ↓ walk into Start Gate
+🍱 Sahur phase — collect 15 foods
+   ↓ score reaches 15 → Next button appears
+   ↓ walk into Next button
+🌅 Puasa phase begins!
 ```
 
-## Step 1: The Next button sprite
+## Step 1: Understand the Next button sprite
 
-The Next button is a `FinishSahur` sprite. It uses an image asset and an **animation** to pulse or glow to draw the player's attention. We've already added this inside the overlap events — let's understand it fully:
+The Next button is a **FinishSahur** kind sprite. When it appears, it plays a looping animation to attract the player's attention.
 
-```typescript
-NextButton = sprites.create(assets.image`NextButtonIcon`, SpriteKind.FinishSahur)
+In your overlap event where score equals 15 (or 10 for coins), you already created it:
+
+```blocks
+let NextButton = sprites.create(img`
+    . . f f f f f f f f f f . .
+    . f 1 1 1 1 1 1 1 1 1 1 f .
+    . f 1 1 1 1 1 1 1 1 1 1 f .
+    . . f f f f f f f f f f . .
+    `, SpriteKind.Player)
 NextButton.setScale(0.15, ScaleAnchor.Middle)
 NextButton.setPosition(144, 102)
-animation.runImageAnimation(
-    NextButton,
-    assets.animation`myAnim1`,
-    200,
-    true
-)
 ```
 
-- `setScale(0.15, ...)` — the raw asset is large, so we scale it down to 15% of its original size
-- `setPosition(144, 102)` — places it in the lower-right corner
-- `animation.runImageAnimation` with `myAnim1` — plays a looping animation from your assets (e.g. a pulsing glow effect)
-- `200` milliseconds per frame — fast enough to look animated
+## Step 2: Add the FinishSahur overlap event
 
-## Step 2: The FinishSahur overlap event
+Now add a new **on sprite overlaps** block. Set it to **Player** overlaps **FinishSahur** (or Player for now):
 
-When the player touches the `FinishSahur` sprite, the next phase begins. This event must be declared **outside** all functions, at the top level:
-
-```typescript
-sprites.onOverlap(SpriteKind.Player, SpriteKind.FinishSahur, function (sprite, otherSprite) {
-    Puasa()
+```blocks
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Player, function (sprite, otherSprite) {
+    game.splash("Selamat Berpuasa!")
 })
 ```
 
-## Step 3: Create the Puasa() function
+This fires when the player walks into the Next button and starts the Puasa phase.
 
-`Puasa` means fasting. This is the next phase of the game. For now, create a placeholder — you can expand it with new scenes, countdown timers, or more collectibles in the future!
+~hint What is Puasa? 💡
+**Puasa** means fasting in Indonesian. This is where your next game phase goes — maybe a daytime scene where the player must avoid food! You can build it out however you like.
+hint~
 
-```typescript
-function Puasa() {
-    // The fasting phase begins here!
-    // Ideas to add:
-    // - New background (daytime scene)
-    // - Countdown timer for how long to avoid food
-    // - Bonus collectibles (prayers, good deeds)
-    game.splash("Selamat Berpuasa! 🌙")
-}
-```
+## Step 3: Check all your overlap events
 
-## Step 4: Review all your overlap events
+Make sure you have all **4** overlap events in your game:
 
-Make sure you have these three overlap events at the top level of your project:
-
-```typescript
-// 1. Start the Sahur phase
-sprites.onOverlap(SpriteKind.Player, SpriteKind.StartGate, function (sprite, otherSprite) {
-    Sahur()
+```blocks
+// 1 — Start Gate → begins Sahur
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Player, function (sprite, otherSprite) {
+    game.splash("Sahur begins!")
 })
 
-// 2. Collect food during Sahur
+// 2 — Collect food
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     info.changeScoreBy(1)
-    sprites.destroy(otherSprite)
-    if (info.score() < 5) {
-        music.play(music.createSoundEffect(WaveShape.Square, 400, 600, 255, 0, 100, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.UntilDone)
-    }
-    if (info.score() == 15) {
-        NextButton = sprites.create(assets.image`NextButtonIcon`, SpriteKind.FinishSahur)
-        NextButton.setScale(0.15, ScaleAnchor.Middle)
-        NextButton.setPosition(142, 101)
-        animation.runImageAnimation(NextButton, assets.animation`myAnim1`, 200, true)
-    }
+    otherSprite.destroy()
 })
 
-// 3. Collect Pahala coins
+// 3 — Collect coins
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Coin, function (sprite, otherSprite) {
     info.changeScoreBy(1)
-    sprites.destroy(otherSprite)
-    if (info.score() < 5) {
-        music.play(music.createSoundEffect(WaveShape.Square, 400, 600, 255, 0, 100, SoundExpressionEffect.None, InterpolationCurve.Linear), music.PlaybackMode.UntilDone)
-    }
-    if (info.score() == 10) {
-        NextButton = sprites.create(assets.image`NextButtonIcon`, SpriteKind.FinishSahur)
-        NextButton.setScale(0.15, ScaleAnchor.Middle)
-        NextButton.setPosition(144, 102)
-        animation.runImageAnimation(NextButton, assets.animation`myAnim1`, 200, true)
-    }
+    otherSprite.destroy()
 })
 
-// 4. Move to the Puasa phase
-sprites.onOverlap(SpriteKind.Player, SpriteKind.FinishSahur, function (sprite, otherSprite) {
-    Puasa()
+// 4 — Next button → begins Puasa
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Player, function (sprite, otherSprite) {
+    game.splash("Selamat Berpuasa!")
 })
 ```
 
-## Step 5: The game entry point
+## Step 4: Add a win splash
 
-Make sure the very last line of your project calls `intro()`:
+When the player reaches the Puasa phase, show a congratulations message:
 
-```typescript
-intro()
+```blocks
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Player, function (sprite, otherSprite) {
+    game.splash("Selamat Berpuasa! 🌙")
+    game.splash("Ramadan Kareem! ✨")
+})
 ```
 
-This is your game's entry point — everything else is triggered by player actions and overlap events.
+Find ``||game:splash||`` in ``||game:Game||``.
 
-## Ideas to extend the game
+## Step 5: Ideas to extend your game! @showdialog
 
-Now that the foundation is complete, here are some things you could add:
+Now that you have the full loop working, here are some ideas to make it even better:
 
-- A **countdown timer** in the Puasa phase — can the player go 30 seconds without touching food?
-- A **high score** display using `game.showLongText()` at the end
-- **Background music** using `music.play()` at the start of each phase
-- A **difficulty system** that makes food spawn faster on repeat playthroughs
-- More **SpriteKind** types for prayer mats, lanterns, and crescents
+🌅 **Puasa phase** — a daytime scene where you must avoid food sprites for 30 seconds
 
-## Done! @showdialog
+⏱️ **Countdown timer** — use ``||info:start countdown||`` in the Puasa phase
 
-Congratulations — you've completed the full Ramadan Game skillmap! 🎉🌙
+🎵 **Background music** — add ``||music:play music||`` at the start of each scene
 
-You've learned how to:
-- Create custom sprite kinds
-- Build animated multi-scene games
-- Use overlap events to drive game flow
-- Spawn collectibles with loops and timing
-- Chain game phases with functions
+⭐ **High score** — show the final score at the end with ``||game:game over||``
 
-Ramadan Kareem! ✨
+🕌 **More collectibles** — add prayer mats, lanterns, and crescent moons as bonus items!
+
+## Congratulations! @showdialog
+
+You have completed the full **Ramadan Game Skillmap**! 🎉🌙
+
+You learned how to:
+- ✅ Create custom Sprite Kinds
+- ✅ Build multi-scene animated games
+- ✅ Use overlap events to drive game flow
+- ✅ Spawn collectibles with loops and timing
+- ✅ Chain game phases together with functions
+
+**Ramadan Kareem! 🌙✨**

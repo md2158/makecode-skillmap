@@ -2,89 +2,94 @@
 
 ## Bring Your Character to Life! @showdialog
 
-Now that the intro screen is set up, it's time to add the **player character** — a boy sprite with a walking animation. You'll learn how to create a player sprite, enable movement with the controller, and run a multi-frame animation.
+Time to add the **player** — a boy sprite who walks around collecting food and coins!
+
+You will learn how to:
+- Create a player sprite
+- Move it with the controller
+- Run a walking animation
 
 ## Step 1: Create the player sprite
 
-Inside your `intro()` function, after the start gate, create the player sprite and assign it to `mySprite`:
+Inside ``||loops:on start||``, add a block to create your player sprite and set it as **Player** kind.
 
-```typescript
-    mySprite = sprites.create(assets.image`Boy-standing`, SpriteKind.Player)
+```blocks
+let mySprite = sprites.create(img`
+    . . . . f f f f . . . . 
+    . . f f e e e e f f . . 
+    . f f e e e e e e f f . 
+    f f f f 4 e e e f f f f 
+    f f f 4 4 4 e e f f f f 
+    f f f 4 4 4 4 e e f f f 
+    f 4 e 4 4 4 4 4 4 e 4 f 
+    f 4 4 f f 4 4 f f 4 4 f 
+    f e 4 d d d d d d 4 e f 
+    . f e d d b b d d e f . 
+    . f f e 4 4 4 4 e f f . 
+    e 4 f b 1 1 1 1 b f 4 e 
+    4 d f 1 1 1 1 1 1 f d 4 
+    4 4 f 6 6 6 6 6 6 f 4 4 
+    . . . f f f f f f . . . 
+    . . . f f . . f f . . . 
+    `, SpriteKind.Player)
 ```
 
-This creates the sprite using the standing image from your assets.
+## Step 2: Move with the controller
 
-## Step 2: Enable controller movement
+Add the **move mySprite with buttons** block from ``||controller:Controller||``. This lets the player walk with arrow keys or D-pad!
 
-Allow the player to move with the arrow keys or D-pad:
-
-```typescript
-    controller.player1.moveSprite(mySprite)
+```blocks
+controller.moveSprite(mySprite)
 ```
 
-## Step 3: Set starting position and scale
+## Step 3: Set starting position and size
 
-Position the player on the left side of the screen and scale it up so it's clearly visible:
+Place the player on the left side of the screen. Scale it up so it looks bigger and clearer.
 
-```typescript
-    mySprite.setPosition(20, 101)
-    mySprite.setScale(2, ScaleAnchor.Middle)
+```blocks
+mySprite.setPosition(20, 101)
+mySprite.setScale(2, ScaleAnchor.Middle)
 ```
 
-## Step 4: Add the walking animation
+## Step 4: Keep the player on screen
 
-Now for the fun part! Use `animation.runImageAnimation()` to cycle through 3 frames of the walking animation. The frames are pixel art images drawn directly in the code.
+Add the **stay in screen** block so the player cannot walk off the edge!
 
-The key parameters are:
-- **sprite** — which sprite to animate (`mySprite`)
-- **frames** — an array of images `[img\`...\`, img\`...\`, img\`...\`]`
-- **interval** — how many milliseconds between frames (`500`)
-- **loop** — whether to keep looping (`true`)
-
-```typescript
-    animation.runImageAnimation(
-        mySprite,
-        [img`... frame1 ...`, img`... frame2 ...`, img`... frame3 ...`],
-        500,
-        true
-    )
+```blocks
+mySprite.setStayInScreen(true)
 ```
 
-> **Tip:** Copy the full pixel art frames from your working project or the game's source code. Each frame is a 12x16 grid of color codes.
+## Step 5: Add a walking animation
 
-## Step 5: Keep the player on screen
+Go to ``||animation:Animation||`` in the toolbox. Drag out the **animate** block.
 
-Make sure the player can't walk off the edge:
+Click the animation frames box to add your walking frames one by one.
 
-```typescript
-    mySprite.setStayInScreen(true)
+```blocks
+animation.runImageAnimation(
+    mySprite,
+    [img`
+    . . . . f f f f . . . . 
+    . . f f e e e e f f . . 
+    . f f e e e e e e f f . 
+    f f f f 4 e e e f f f f 
+    f f f 4 4 4 e e f f f f 
+    f 4 e 4 4 4 4 4 4 e 4 f 
+    f 4 4 f f 4 4 f f 4 4 f 
+    4 4 f 6 6 6 6 6 6 f 4 4 
+    . . . f f f f f f . . . 
+    `],
+    500,
+    true
+)
 ```
 
-## Your complete player setup inside intro()
-
-```typescript
-function intro() {
-    scene.setBackgroundColor(13)
-    RamdhanKareem = sprites.create(assets.image`Ramadan Greeting Text`, SpriteKind.Decoration)
-    RamdhanKareem.y += -24
-    StartText = sprites.create(assets.image`Start Banner`, SpriteKind.StartGate)
-    StartText.setScale(0.14, ScaleAnchor.Middle)
-    StartText.setPosition(128, 100)
-    mySprite = sprites.create(assets.image`Boy-standing`, SpriteKind.Player)
-    controller.player1.moveSprite(mySprite)
-    mySprite.setPosition(20, 101)
-    mySprite.setScale(2, ScaleAnchor.Middle)
-    animation.runImageAnimation(mySprite, [ /* your 3 frames here */ ], 500, true)
-    mySprite.setStayInScreen(true)
-}
-```
-
-## Understanding multi-frame animation
-
-Each frame in the animation array is defined using the `img` template literal. The letters and numbers represent colors in MakeCode's palette — for example `f` is black, `e` is white, `4` is skin tone. A period `.` means transparent.
-
-Try changing the interval from `500` to `200` to make the character walk faster!
+~hint What does 500 mean? 💡
+**500** is the time in milliseconds between each animation frame. Try **200** for a faster walk, or **800** for a slow shuffle!
+hint~
 
 ## Done! @showdialog
 
-Your player is walking on screen! 🚶 In the next tutorial, you'll add directional animations so the character faces the right way when moving left or right.
+Your player is walking! 🚶
+
+Next tutorial — making the character face left when moving left!

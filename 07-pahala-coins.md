@@ -2,97 +2,108 @@
 
 ## Earn Your Rewards! @showdialog
 
-**Pahala** means spiritual reward in Arabic and Indonesian. In this phase, your player collects 10 glowing coin sprites representing good deeds during Ramadan. You'll learn how to use loops with `pause()` to create a satisfying drip-feed of collectibles.
+**Pahala** means spiritual reward in Arabic. 🪙
 
-## Step 1: Declare the coin variable
+In this tutorial you will spawn **10 golden coins** that appear one by one for the player to collect!
 
-At the bottom of your project, add:
+## Step 1: Add a loop for 10 coins
 
-```typescript
-let GetPahala: Sprite = null
-```
+Go to ``||loops:Loops||`` and drag a **repeat** block. Set it to **10**.
 
-## Step 2: Understand the timing pattern
+Inside, create a coin sprite at a random position, then pause before the next one:
 
-Instead of spawning all 10 coins at once, we use a loop with `pause(500)` inside it. This means one coin appears every 0.5 seconds, giving the player time to react and move toward each one as it appears.
-
-```typescript
+```blocks
 for (let index = 0; index < 10; index++) {
-    // create coin
+    let GetPahala = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . 4 4 4 4 4 . . . . . . 
+        . . . 4 4 4 5 5 5 d 4 4 4 4 . . 
+        . . 4 d 5 d 5 5 5 d d d 4 4 . . 
+        . . 4 5 5 1 1 1 d d 5 5 5 4 . . 
+        . 4 5 5 5 1 1 1 5 1 1 5 5 4 4 . 
+        . 4 d d 1 1 5 5 5 1 1 5 5 d 4 . 
+        . 4 5 5 1 1 5 1 1 5 5 d d d 4 . 
+        . 2 5 5 5 d 1 1 1 5 1 1 5 5 2 . 
+        . 2 d 5 5 d 1 1 1 5 1 1 5 5 2 . 
+        . . 2 4 d d 5 5 5 5 d d 5 4 . . 
+        . . . 2 2 4 d 5 5 d d 4 4 . . . 
+        . . 2 2 2 2 2 4 4 4 2 2 2 . . . 
+        . . . 2 2 4 4 4 4 4 4 2 2 . . . 
+        . . . . . 2 2 2 2 2 2 . . . . . 
+        `, SpriteKind.Coin)
+    GetPahala.setPosition(randint(0, 100), randint(0, 100))
     pause(500)
 }
 ```
 
-## Step 3: Spawn the Pahala coins
+Find ``||sprites:create sprite of kind||`` in ``||sprites:Sprites||`` and ``||loops:pause||`` in ``||loops:Loops||``.
 
-Inside the loop, create a coin sprite at a random position. The coin image is a 16x16 gold coin with a highlighted center:
+~hint Why pause between coins? 💡
+Without the pause, all 10 coins appear at the same instant. With **pause(500)**, one coin appears every half second — so the player can see and chase each one!
+hint~
 
-```typescript
-    for (let index = 0; index < 10; index++) {
-        GetPahala = sprites.create(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . 4 4 4 4 4 . . . . . . 
-            . . . 4 4 4 5 5 5 d 4 4 4 4 . . 
-            . . 4 d 5 d 5 5 5 d d d 4 4 . . 
-            . . 4 5 5 1 1 1 d d 5 5 5 4 . . 
-            . 4 5 5 5 1 1 1 5 1 1 5 5 4 4 . 
-            . 4 d d 1 1 5 5 5 1 1 5 5 d 4 . 
-            . 4 5 5 1 1 5 1 1 5 5 d d d 4 . 
-            . 2 5 5 5 d 1 1 1 5 1 1 5 5 2 . 
-            . 2 d 5 5 d 1 1 1 5 1 1 5 5 2 . 
-            . . 2 4 d d 5 5 5 5 d d 5 4 . . 
-            . . . 2 2 4 d 5 5 d d 4 4 . . . 
-            . . 2 2 2 2 2 4 4 4 2 2 2 . . . 
-            . . . 2 2 4 4 4 4 4 4 2 2 . . . 
-            . . . . . 2 2 2 2 2 2 . . . . . 
-            `, SpriteKind.Coin)
-        GetPahala.setPosition(randint(0, 100), randint(0, 100))
-        pause(500)
-    }
-```
+## Step 2: Handle coin collection
 
-## Step 4: Where does this code go?
+Add an **on sprite overlaps** block for **Player** overlaps **Coin**:
 
-This loop belongs inside the `Sahur()` function — specifically called **after** the food-spawning loop. The game flow is:
-
-1. `intro()` — greeting screen
-2. Player walks into Start Gate → `Sahur()` runs
-3. Inside `Sahur()`: food loop runs, then coin loop runs
-4. Player collects all foods → Next button appears
-5. Player touches Next button → `Puasa()` runs
-
-So the Pahala coins spawn alongside the Sahur food, but they use a different sprite kind (`Coin` vs `Food`) so their overlap events are handled separately.
-
-## Step 5: Handle coin collection
-
-Add an overlap event for `Coin` sprites (outside `Sahur()`):
-
-```typescript
+```blocks
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Coin, function (sprite, otherSprite) {
     info.changeScoreBy(1)
-    sprites.destroy(otherSprite)
+    otherSprite.destroy()
+})
+```
+
+## Step 3: Add the score sound
+
+Play a sound when score is under 5, just like the food tutorial:
+
+```blocks
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Coin, function (sprite, otherSprite) {
+    info.changeScoreBy(1)
+    otherSprite.destroy()
     if (info.score() < 5) {
         music.play(
-            music.createSoundEffect(WaveShape.Square, 400, 600, 255, 0, 100, SoundExpressionEffect.None, InterpolationCurve.Linear),
+            music.createSoundEffect(
+                WaveShape.Square,
+                400,
+                600,
+                255,
+                0,
+                100,
+                SoundExpressionEffect.None,
+                InterpolationCurve.Linear
+            ),
             music.PlaybackMode.UntilDone
         )
-    }
-    if (info.score() == 10) {
-        NextButton = sprites.create(assets.image`NextButtonIcon`, SpriteKind.FinishSahur)
-        NextButton.setScale(0.15, ScaleAnchor.Middle)
-        NextButton.setPosition(144, 102)
-        animation.runImageAnimation(NextButton, assets.animation`myAnim1`, 200, true)
     }
 })
 ```
 
-The Pahala coins unlock the Next button at score **10** (vs food at **15**).
+## Step 4: Unlock the Next button at score 10
 
-## Challenge: Change the coin spawn range
+The Pahala phase unlocks the Next button at **10 coins** (different from the food phase at 15):
 
-The coins spawn in a `randint(0, 100)` area. Try changing the max value to `150` or adding a minimum like `randint(20, 130)` to spread them more evenly and avoid corners.
+```blocks
+    if (info.score() == 10) {
+        let NextButton = sprites.create(img`
+            . . f f f f f f f f f f . .
+            . f f 1 1 1 1 1 1 1 1 f f .
+            . f 1 1 1 1 1 1 1 1 1 1 f .
+            . f f 1 1 1 1 1 1 1 1 f f .
+            . . f f f f f f f f f f . .
+            `, SpriteKind.Player)
+        NextButton.setScale(0.15, ScaleAnchor.Middle)
+        NextButton.setPosition(144, 102)
+    }
+```
+
+~hint Challenge! 🌟
+Try changing ``||loops:randint(0, 100)||`` to ``||loops:randint(20, 130)||`` to spread the coins more evenly around a bigger area of the screen!
+hint~
 
 ## Done! @showdialog
 
-Pahala coins are flowing! 🪙 In the final tutorial, you'll wire up the animated Next button and complete the full game loop.
+Pahala coins are raining down! 🪙✨
+
+Last tutorial — wiring up the Next button to complete the full game loop!

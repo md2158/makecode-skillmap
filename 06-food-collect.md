@@ -1,109 +1,106 @@
-# Spawn & Collect Sahur Foods
+# Spawn and Collect Sahur Foods
 
 ## Time to Eat! @showdialog
 
-In this tutorial, you'll spawn 15 Sahur food sprites across the scene and handle what happens when the player collects them — updating the score, playing a sound, and unlocking the Next button when enough food is collected.
+In this tutorial you will spawn **15 Sahur food sprites** across the scene and handle collecting them — updating the score and playing a sound effect! 🍱
 
-## Step 1: Set up the food image array
+## Step 1: Create a food sprite with a loop
 
-Inside `Sahur()`, after placing the trees, define an array of food images. This lets us randomly pick from multiple food types each time we spawn one:
+Go to ``||loops:Loops||`` and drag out a **repeat** block. Set it to **15**.
 
-```typescript
-    let SahurFoods: Image[] = []
-    SahurFoods = [
-        img`... food image 1 ...`,
-        img`... food image 2 ...`,
-        img`... food image 3 ...`
-    ]
+Inside the loop, create a food sprite at a random position:
+
+```blocks
+for (let index = 0; index < 15; index++) {
+    let SahurFood = sprites.create(img`
+        . . 2 2 b b b b b . . . . . . . 
+        . 2 b 4 4 4 4 4 4 b . . . . . . 
+        2 2 4 4 4 4 d d 4 4 b . . . . . 
+        2 b 4 4 4 4 4 4 d 4 b . . . . . 
+        2 b 4 4 4 4 4 4 4 d 4 b . . . . 
+        2 b 4 4 4 4 4 4 4 4 4 b . . . . 
+        2 2 b 4 4 4 4 4 4 4 b e . . . . 
+        . 2 b b b 4 4 4 b b b e . . . . 
+        . . e b b b b b b b e e . . . . 
+        . . . e e b 4 4 b e e e b . . . 
+        `, SpriteKind.Food)
+    SahurFood.setPosition(randint(0, 100), randint(0, 100))
+    SahurFood.setStayInScreen(true)
+    pause(500)
+}
 ```
 
-> **Tip:** The game has 3 food images — rice with chicken, a bowl of soup, and another dish. Copy the pixel art from the source code.
+~hint What does pause(500) do? 💡
+It makes the game wait **half a second** before spawning the next food item. This means food appears one by one, giving the player time to see each one!
+hint~
 
-Also declare `SahurFood` as a variable at the bottom of your project:
+## Step 2: Handle food collection
 
-```typescript
-let SahurFood: Sprite = null
-```
+Go to ``||sprites:Sprites||`` and drag out an **on sprite overlaps** block. Set it to **Player** overlaps **Food**.
 
-## Step 2: Spawn 15 food sprites with a loop
+Inside it, increase the score and destroy the food sprite:
 
-Use a `for` loop to create 15 food sprites, placing each one at a random position. Add a `pause(500)` between each spawn so they appear one by one rather than all at once:
-
-```typescript
-    for (let index = 0; index < 15; index++) {
-        SahurFood = sprites.create(SahurFoods[randint(0, 2)], SpriteKind.Food)
-        SahurFood.setPosition(randint(0, 100), randint(0, 100))
-        SahurFood.setStayInScreen(true)
-        pause(500)
-    }
-```
-
-`randint(0, 2)` picks a random number between 0 and 2 — matching our 3 food images (index 0, 1, 2).
-
-## Step 3: Handle the food overlap event
-
-Outside the `Sahur()` function, add an overlap event for when the player touches a `Food` sprite:
-
-```typescript
+```blocks
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     info.changeScoreBy(1)
-    sprites.destroy(otherSprite)
+    otherSprite.destroy()
 })
 ```
 
-This increases the score by 1 and removes the collected food sprite.
+## Step 3: Add a sound effect
 
-## Step 4: Add a sound effect for early collects
+Play a beep sound when the score is still low (under 5). This gives satisfying audio feedback at the start!
 
-Play a short square-wave beep when the score is still under 5. This gives satisfying audio feedback at the start:
-
-```typescript
+```blocks
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     info.changeScoreBy(1)
-    sprites.destroy(otherSprite)
+    otherSprite.destroy()
     if (info.score() < 5) {
         music.play(
-            music.createSoundEffect(WaveShape.Square, 400, 600, 255, 0, 100, SoundExpressionEffect.None, InterpolationCurve.Linear),
+            music.createSoundEffect(
+                WaveShape.Square,
+                400,
+                600,
+                255,
+                0,
+                100,
+                SoundExpressionEffect.None,
+                InterpolationCurve.Linear
+            ),
             music.PlaybackMode.UntilDone
         )
     }
 })
 ```
 
-## Step 5: Unlock the Next Button at score 15
+Find **play sound** in ``||music:Music||``. Click the sound box to design your beep!
 
-When the player collects all 15 food items (score reaches 15), create an animated Next button sprite:
+## Step 4: Unlock the Next button at score 15
 
-```typescript
+When the score reaches **15**, create an animated Next button sprite:
+
+```blocks
     if (info.score() == 15) {
-        NextButton = sprites.create(assets.image`NextButtonIcon`, SpriteKind.FinishSahur)
+        let NextButton = sprites.create(img`
+            . . . . . . . . . . . . . . . .
+            . . f f f f f f f f f f f f . .
+            . f f 1 1 1 1 1 1 1 1 1 1 f f .
+            . f 1 1 1 1 1 1 1 1 1 1 1 1 f .
+            . f 1 1 1 1 1 1 1 1 1 1 1 1 f .
+            . f f 1 1 1 1 1 1 1 1 1 1 f f .
+            . . f f f f f f f f f f f f . .
+            `, SpriteKind.Player)
         NextButton.setScale(0.15, ScaleAnchor.Middle)
         NextButton.setPosition(142, 101)
-        animation.runImageAnimation(
-            NextButton,
-            assets.animation`myAnim1`,
-            200,
-            true
-        )
     }
 ```
 
-## Step 6: Wire up the FinishSahur overlap
-
-When the player touches the `FinishSahur` Next button, call the next game phase. Add this outside all functions:
-
-```typescript
-sprites.onOverlap(SpriteKind.Player, SpriteKind.FinishSahur, function (sprite, otherSprite) {
-    Puasa()
-})
-```
-
-> **Note:** You'll build `Puasa()` later. For now, add a placeholder: `function Puasa() {}`
-
-## Understanding the score logic
-
-Notice the score check uses `== 15` (exactly 15) rather than `>= 15`. This means the Next button only appears the moment the 15th food is collected — not on every overlap after that. This is a common game design pattern for one-time unlock triggers.
+~hint Score == 15 vs >= 15 💡
+Using **== 15** (exactly 15) means the Next button only appears once — the moment the 15th food is collected. This avoids it spawning multiple times!
+hint~
 
 ## Done! @showdialog
 
-Sahur time is complete! 🍱 The player can now collect 15 food items to unlock the next phase. Up next — the Pahala coin collection phase!
+Sahur food collection is working! 🍱✅
+
+Next tutorial — spawning the Pahala coins!

@@ -2,91 +2,70 @@
 
 ## Let's Set the Scene! @showdialog
 
-In this tutorial, you'll build the **intro screen** for the Ramadan game. This is the first thing the player sees — a beautiful opening with a "Ramadan Kareem" greeting and a start banner to walk into.
+In this tutorial you will build the **intro screen** — the first thing the player sees when the game starts.
 
-## Step 1: Create the intro function
+You will add:
+- 🌙 A dark background
+- 🏮 A "Ramadan Kareem" greeting banner
+- 🚪 A start gate banner to walk into
 
-We wrap the intro setup in a **function** called `intro()`. This keeps our code organised and easy to call later.
+## Step 1: Set the background color
 
-```typescript
-function intro() {
-    // We'll fill this in step by step
-}
+Set the background to **dark blue (color 13)** to look like a night sky.
+
+Drag this block into the ``||loops:on start||`` block:
+
+```blocks
+scene.setBackgroundColor(13)
 ```
 
-At the very bottom of your project, call the function so it runs when the game starts:
+## Step 2: Add the Ramadan Kareem banner
 
-```typescript
-intro()
+Create a sprite for the greeting. Set its kind to **Decoration** and move it up on the screen.
+
+```blocks
+let RamdhanKareem = sprites.create(img`
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    `, SpriteKind.Decoration)
+RamdhanKareem.y += -24
 ```
 
-## Step 2: Set the background color
+~hint How do I find the image? 💡
+Click the grey image box in the block to open the sprite editor. Draw your banner or paste your asset there!
+hint~
 
-Inside `intro()`, set the background to a dark blue — color `13` — to give the night sky feel of Ramadan.
+## Step 3: Add the Start Gate banner
 
-```typescript
-function intro() {
-    scene.setBackgroundColor(13)
-}
+This is the sprite the player will walk into to start the game. Scale it down and place it in the center of the screen.
+
+```blocks
+let StartText = sprites.create(img`
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    `, SpriteKind.Player)
+StartText.setScale(0.14, ScaleAnchor.Middle)
+StartText.setPosition(128, 100)
 ```
 
-## Step 3: Add the Ramadan Kareem banner
+~hint Why Player kind for the gate? 💡
+We will change this to the custom **StartGate** kind in the full project. For now, use Player so the block is easy to find!
+hint~
 
-Create a sprite using your greeting image asset and assign it the `Decoration` kind. Nudge it upward so it sits at the top of the screen.
+## Step 4: Add an overlap event
 
-```typescript
-    RamdhanKareem = sprites.create(assets.image`Ramadan Greeting Text`, SpriteKind.Decoration)
-    RamdhanKareem.y += -24
-```
+When the player sprite touches the Start Gate, the Sahur scene begins!
 
-## Step 4: Add the Start Gate banner
+Go to ``||sprites:Sprites||`` and drag out an **on sprite overlaps** block. Set both kinds.
 
-Create the start banner the player walks into to begin playing. Scale it down and position it center-right.
-
-```typescript
-    StartText = sprites.create(assets.image`Start Banner`, SpriteKind.StartGate)
-    StartText.setScale(0.14, ScaleAnchor.Middle)
-    StartText.setPosition(128, 100)
-```
-
-## Step 5: Declare your variables
-
-Outside all functions at the bottom of your project, declare these variables:
-
-```typescript
-let RamdhanKareem: Sprite = null
-let StartText: Sprite = null
-let mySprite: Sprite = null
-let NextButton: Sprite = null
-```
-
-## Step 6: Wire up the Start Gate overlap
-
-When the player touches the `StartGate`, call `Sahur()` to move to the next phase. Add this outside the `intro()` function:
-
-```typescript
-sprites.onOverlap(SpriteKind.Player, SpriteKind.StartGate, function (sprite, otherSprite) {
-    Sahur()
+```blocks
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Player, function (sprite, otherSprite) {
+    game.splash("Sahur time!")
 })
 ```
 
-> **Note:** You'll build `Sahur()` in a later tutorial. For now add a placeholder: `function Sahur() {}`
+## Finished! @showdialog
 
-## Your full intro() so far
+Your intro screen is ready! 🌙
 
-```typescript
-function intro() {
-    scene.setBackgroundColor(13)
-    RamdhanKareem = sprites.create(assets.image`Ramadan Greeting Text`, SpriteKind.Decoration)
-    RamdhanKareem.y += -24
-    StartText = sprites.create(assets.image`Start Banner`, SpriteKind.StartGate)
-    StartText.setScale(0.14, ScaleAnchor.Middle)
-    StartText.setPosition(128, 100)
-}
-
-intro()
-```
-
-## Done! @showdialog
-
-Your intro screen is ready! 🌙 The greeting banner and start gate are in place. Next, you'll add your animated player character.
+The greeting and start gate are in place. Next up — adding your animated player character!
